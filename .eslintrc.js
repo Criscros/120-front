@@ -1,11 +1,3 @@
-# 120-front
-
-# use node version 12 
-
-# npm install 
-
-# create file as .eslintrc.js and pase below code 
-
 module.exports = {
     "env": {
         "browser": true,
@@ -22,11 +14,3 @@ module.exports = {
     "rules": {
     }
 };
-
-# create file .eslinignore and pase below code
-
-src/assets/*
-src/fake-db/*
-src/layouts/components/vx-tooltip/VxTooltip.vue
-tailwind.config.js
-tailwind-v0.js
