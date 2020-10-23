@@ -34,9 +34,9 @@ const router = new Router({
         // Theme Routes
         // =============================================================================
               {
-                path: '/models',
+                path: '/contacts',
                 name: 'home',
-                component: () => import('./views/performers/PerformerList.vue'),
+                component: () => import('./views/contacts/ContacList.vue'),
                 meta: {
                   rule: 'admin',
                   authRequired : true
@@ -74,6 +74,23 @@ const router = new Router({
                 name: 'register',
                 component: () => import('@/views/register/Register.vue')
               },
+              {
+                path: '/forgot-password',
+                name: 'page-forgot-password',
+                component: () => import('@/views/login/ForgotPassword.vue'),
+                meta: {
+                  rule: 'editor'
+                }
+              },
+              {
+                path: '/api/resetpassword/auth/:id/:token',
+                name: 'page-forgot-password',
+                component: () => import('@/views/login/ResetPassword.vue'),
+                meta: {
+                  rule: 'editor'
+                }
+              }
+              
 
             ]
         },

@@ -50,7 +50,7 @@
 
                   <div class="flex flex-wrap justify-between my-5">
                       <!-- <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox> -->
-                      <router-link to="">Olvido el Pasword?</router-link>
+                      <router-link to="/forgot-password">forgot  Pasword?</router-link>
                   </div>
                   <vs-button type="border" to="/register" >Register</vs-button>
                   <vs-button class="float-right" @click="Login">Login</vs-button>

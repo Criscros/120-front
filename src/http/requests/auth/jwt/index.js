@@ -62,5 +62,19 @@ export default {
   },
   refreshToken () {
     return axios.post('/api/auth/refresh-token', {accessToken: localStorage.getItem('accessToKen')})
+  },
+  forgotPassword (email){
+
+    return axios.post('/api/auth/forgotpassword', {
+      email: email,
+    })
+  },
+  resetPassword(password){
+    return axios.post('/api/auth/resetpassword', {
+      password: password,
+      user_id : localStorage.getItem('user_id'),
+      token : localStorage.getItem('accessToken')
+
+    })
   }
 }

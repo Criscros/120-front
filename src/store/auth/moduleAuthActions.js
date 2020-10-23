@@ -302,7 +302,6 @@ export default {
 
   // JWT
   loginJWT ({ commit }, payload) {
-    console.log(payload)
     return new Promise((resolve, reject) => {
 
       jwt.loginStudio(payload.userDetails.email, payload.userDetails.password)
@@ -380,5 +379,54 @@ export default {
     return new Promise((resolve) => {
       jwt.refreshToken().then(response => { resolve(response) })
     })
+  },
+  forgotPassword ({commit} ,email){
+    //  SEND  EMAIL
+
+    return new Promise((resolve, reject) => {
+
+      jwt.forgotPassword(email)
+        .then(response => {
+          console.log('1',response)
+          // If there's user data in response
+          if (response.data) {
+            commit('SET_BEARER', response.data)
+            console.log('0',response.data)
+            localStorage.setItem('accessToken', response.data.token)
+            localStorage.setItem('user_id', response.data.user_id)
+            console.log('---','/api/resetpassword/auth/'+response.data.user_id + '/' + response.data.token)
+            router.push(router.currentRoute.query.to || '/api/resetpassword/auth/'+response.data.user_id + '/' + response.data.token)
+            resolve(response)
+          } else {
+            reject({message: 'Wrong Email or Password'})
+          }
+
+        })
+        .catch(error => { reject(error) })
+     })
+
+  },
+  resetPassword( {commit} ,password){
+
+    let token = localStorage.getItem('accessToken')
+    console.log(token)
+
+    return new Promise((resolve, reject) => {
+
+      jwt.resetPassword(password,token)
+        .then(response => {
+      
+          // If there's user data in response
+          if (response.data) {
+
+            resolve(response)
+          } else {
+            reject({message: 'Wrong Email or Password'})
+          }
+
+        })
+        .catch(error => { reject(error) })
+     })
+
   }
 }
