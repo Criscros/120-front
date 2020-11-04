@@ -11,7 +11,7 @@
 <template>
   <vs-sidebar click-not-close position-right parent="body" default-index="1" color="primary" class="add-new-data-sidebar items-no-padding" spacer v-model="isSidebarActiveLocal">
     <div class="mt-6 flex items-center justify-between px-6">
-        <h4>{{ Object.entries(this.data).length === 0 ? "NUEVO" : "ACTUALIZAR" }} CONTACT</h4>
+        <h4>{{ Object.entries(this.data).length === 0 ? "NUEVA" : "ACTUALIZAR" }} MODELO</h4>
         <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
     </div>
     <vs-divider class="mb-0"></vs-divider>
@@ -25,19 +25,41 @@
 
      
         </template>
-
+        <!-- TYPE CONECTION -->
+        <vs-select
+        class="mt-5 w-full"
+        label="tipo de conexión"
+        v-model="type_conection"
+        >
+        <vs-select-item :is-selected.sync="item.isSelected" :key="index" :value="item.value" :text="item.isSelected?item.selectedText:item.label" v-for="(item,index) in options" />
+        </vs-select>
+    
         <!-- NAME -->
-        <vs-input label="First Name" v-model="name" class="mt-5 w-full" name="item-name" v-validate="'required'" />
-
+        <vs-input label="Nombres" v-model="name" class="mt-5 w-full" name="item-name" v-validate="'required'" />
+        <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
         <!-- LAST NAME -->
-        <vs-input label="Last Name" v-model="last_name" class="mt-5 w-full" name="item-name" v-validate="'required'" />
+        <vs-input label="Apellidos" v-model="last_name" class="mt-5 w-full" name="item-name" v-validate="'required'" />
+        <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
 
+        <!-- NUMBER IDENTIFICATION -->
+        <vs-input 
+            v-validate="{ required: true, regex: /\d+(\.\d+)?$/ }"
+            label="Numero identificacion" v-model="number_identification" class="mt-5 w-full" name="item-name"
+         />
+        <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
+        
+        <vs-input
+            type="date"
+            label="Fecha nacimiento" v-model="birthday" class="mt-5 w-full" name="item-name" 
+         />
+        <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
+        
         <!-- EMAIL  -->
         <vs-input label="Email" v-model="email" class="mt-5 w-full" name="item-name" v-validate="'required'" />
         <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
 
         <!-- PHONE  -->
-        <vs-input label="phone" v-model="phone" class="mt-5 w-full" name="item-name" v-validate="'required'" />
+        <vs-input label="Telefono" v-model="phone" class="mt-5 w-full" name="item-name" v-validate="'required'" />
         <span class="text-danger text-sm" v-show="errors.has('item-name')">{{ errors.first('item-name') }}</span>
     
 
@@ -45,8 +67,8 @@
     </component>
 
     <div class="flex flex-wrap items-center p-6" slot="footer">
-      <vs-button class="mr-6" @click="submitData" :disabled="!isFormValid">Update</vs-button>
-      <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Cancel</vs-button>
+      <vs-button class="mr-6" @click="submitData" :disabled="!isFormValid">Actualizar</vs-button>
+      <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Cancelar</vs-button>
     </div>
   </vs-sidebar>
 </template>
@@ -74,9 +96,15 @@ export default {
       dataId: null,
       name: '',
       last_name: '',
+      number_identification :'',
+      birthday: '',
       email :'',
       phone :'',
-
+      type_conection:0,
+      options:[
+        {value: 1, label: 'estudio', selectedText: 'studio', isSelected: false },
+        {value: 2, label: 'casa', selectedText: 'casa', isSelected: false }
+      ],
     
 
       dataCategory: null,
@@ -138,7 +166,7 @@ export default {
       }
     },
     isFormValid () {
-      return !this.errors.any() && this.name && this.last_name && this.email && this.phone
+      return !this.errors.any() && this.name && this.last_name && this.number_identification 
     },
     scrollbarTag () { return this.$store.getters.scrollbarTag }
   },
@@ -156,8 +184,13 @@ export default {
       this.$validator.validateAll().then(result => {
         if (result) {
           const obj = {
+            id: this.dataId,
+            type_conection : this.type_conection,
             name: this.name,
             last_name: this.last_name,
+            number_identification: this.number_identification,
+            birthday : this.birthday,
+            studio_id: '5f6a6b435f4dcd2133c1244e',
             phone: this.phone,
             email: this.email
           }

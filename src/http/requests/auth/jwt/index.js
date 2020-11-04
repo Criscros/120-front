@@ -45,8 +45,8 @@ export default {
       return Promise.reject(error)
     })
   },
-  loginStudio (email, pwd) {
-    return axios.post('/api/auth/studio/login', {
+  login (email, pwd) {
+    return axios.post('/api/auth/login', {
       email,
       password: pwd
     })
@@ -69,12 +69,13 @@ export default {
       email: email,
     })
   },
-  resetPassword(password){
+  resetPassword(password, token){
+    localStorage.setItem('accessToken',token) 
+    
+    console.log(localStorage.getItem('accessToken'))
     return axios.post('/api/auth/resetpassword', {
       password: password,
       user_id : localStorage.getItem('user_id'),
-      token : localStorage.getItem('accessToken')
-
     })
   }
 }

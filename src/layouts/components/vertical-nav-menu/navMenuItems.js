@@ -10,9 +10,15 @@
 
 export default [
   {
-    url: "/contacts",
-    name: "contacts",
+    url: "/models",
+    name: "Modelos",
     slug: "home",
+    icon: "HomeIcon",
+  },
+  {
+    url: "/substudios",
+    name: "substudios",
+    slug: "substudio",
     icon: "HomeIcon",
   }
 ]

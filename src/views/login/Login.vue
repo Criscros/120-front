@@ -30,6 +30,7 @@
 
                 <div>
                   <vs-input
+                      v-validate="'required|email'"
                       name="email"
                       icon-no-border
                       icon="icon icon-user"
@@ -37,7 +38,8 @@
                       label-placeholder="Email"
                       v-model="email"
                       class="w-full"/>
-
+                    <span class="text-danger text-sm">{{ errors.first('email') }}</span>
+  
                   <vs-input
                       type="password"
                       name="password"
@@ -45,15 +47,19 @@
                       icon="icon icon-lock"
                       icon-pack="feather"
                       label-placeholder="Password"
+                      v-validate="'required'"
                       v-model="password"
                       class="w-full mt-6" />
 
                   <div class="flex flex-wrap justify-between my-5">
                       <!-- <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox> -->
-                      <router-link to="/forgot-password">forgot  Pasword?</router-link>
+                      <router-link to="/forgot-password">Olvido el Pasword ?</router-link>
                   </div>
-                  <vs-button type="border" to="/register" >Register</vs-button>
-                  <vs-button class="float-right" @click="Login">Login</vs-button>
+                  <vs-button type="border" to="/register" >Registrarse</vs-button>
+                  <vs-button 
+                    class="float-right"
+                    @click="Login()" 
+                    :disabled="!validateForm">Login</vs-button>
 
                   <vs-divider>O</vs-divider>
 
@@ -87,7 +93,10 @@ export default{
     }
   },
   computed: {
- 
+     validateForm () {
+      // && this.password !== '' && this.confirm_password !== '' && this.isTermsConditionAccepted === true
+      return !this.errors.any()  && this.email !== '' && this.password != '' 
+    }
   },
   methods: {
       Login(){
@@ -99,10 +108,34 @@ export default{
           },
        }
         
-        console.log('email------' , this.email)
-        console.log('email------' , this.password)
+        this.$store.dispatch('auth/loginJWT', payload).then((msg)=>{
+          //console.log(msg.data)
+          if(!msg.data.success){
 
-        this.$store.dispatch('auth/loginJWT', payload)
+            this.$vs.notify({
+                time:4000,
+                title:'verifique los datos ingresados',
+                text:'los datos no concuerdan con la base de datos',
+                color:'danger',
+                iconPack: 'feather',
+                icon: 'icon-clock'
+              })
+
+          }else{
+
+              this.$vs.notify({
+                time:4000,
+                title:'Bienvenido',
+                text:'ahora pude hacer uso de nuestros servcicios.. ',
+                color:'success',
+                iconPack: 'feather',
+                icon: 'icon-clock'
+              })
+
+          }
+
+        
+        })
 
       }
   }

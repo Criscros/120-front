@@ -20,13 +20,22 @@
                         <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center d-theme-dark-bg">
                             <div class="p-8">
                                 <div class="vx-card__title mb-8">
-                                    <h4 class="mb-4">Reset your password</h4>
-                                    <p>Please enter your new password.</p>
+                                    <h4 class="mb-4">Asignar Nuevo  password</h4>
+                                    <p>Por favor ingrese su nuevo password.</p>
                                 </div>
 
-                                <vs-input type="password" label-placeholder="new password" v-model="password" class="w-full mb-8" />
-                                <vs-button type="border" to="/login" class="px-4 w-full md:w-auto">Back To Login</vs-button>
-                                <vs-button class="float-right px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0" @click="forgotPassword()" >Reset Password</vs-button>
+                                <vs-input 
+                                    type="password"
+                                    label-placeholder="new password" 
+                                    v-model="password" 
+                                    v-validate="'required|min:6|max:10'"
+                                    class="w-full mb-8" />
+                                <vs-button type="border" to="/login" class="px-4 w-full md:w-auto"> Login</vs-button>
+                                <vs-button 
+                                    class="float-right px-4 w-full md:w-auto mt-3 mb-8 md:mt-0 md:mb-0"
+                                    :disabled="!validateForm" 
+                                    @click="forgotPassword()" 
+                                    >Nuevo  Password</vs-button>
                             </div>
                         </div>
                     </div>
@@ -37,16 +46,38 @@
 </template>
 
 <script>
+import router from '@/router'
 export default {
   data () {
     return {
       password: ''
     }
-  }, 
+  },
+  computed: {
+     validateForm () {
+      // && this.password !== '' && this.confirm_password !== '' && this.isTermsConditionAccepted === true
+      return !this.errors.any()  && this.password !== ''
+    }
+  },
    methods: {
       forgotPassword(){
          
-        this.$store.dispatch('auth/resetPassword', this.password)
+        this.$store.dispatch('auth/resetPassword', this.password).then((msg)=>{
+
+            if(msg.data.success){
+                this.$vs.notify({
+                    time:4000,
+                    title:'PASSWORD',
+                    text:'Su password se actualizo con exito ..',
+                    color:'success',
+                    iconPack: 'feather',
+                    icon: 'icon-clock'
+                })     
+                
+                router.push(router.currentRoute.query.to || '/login')
+                  
+            }
+        })
 
       }
   }

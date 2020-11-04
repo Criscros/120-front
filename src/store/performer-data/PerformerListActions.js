@@ -11,14 +11,17 @@ import axios from '@/axios.js'
 
 export default {
   addItem ({ commit }, item) {
-
+    console.log('add Performer',item.name)
     return new Promise((resolve, reject) => {
-      axios.post('/api/new-contact',{
+      axios.post('/api/new-model/studio',{
         name:item.name,
         last_name :item.last_name,
+        number_identification : item.number_identification,
+        birth_day: item.birthday,
+        studio_id : localStorage.getItem('studio_id'),
         email: item.email,
         phone : item.phone,
-
+        type_conection : item.type_conection
     })
         .then((response) => {
           commit('ADD_ITEM', Object.assign(item, {id: response.data.id}))
@@ -32,7 +35,7 @@ export default {
     var studio_id = localStorage.getItem('studio_id')
 
     return new Promise((resolve, reject) => {
-      axios.get(`api/contacts`,{
+      axios.get(`api/admin/models/${studio_id}/studio`,{
       })
         .then((response) => {
           console.log('1',response.data)

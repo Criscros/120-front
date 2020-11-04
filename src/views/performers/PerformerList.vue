@@ -92,11 +92,11 @@
       </div>
 
       <template slot="thead">
-        <vs-th sort-key="name">Name</vs-th>
-        <vs-th sort-key="category">Last Name</vs-th>
+        <vs-th sort-key="name">Nombres</vs-th>
+        <vs-th sort-key="category">Documento</vs-th>
         <vs-th sort-key="popularity">Telefono</vs-th>
 
-        <vs-th sort-key="price">Email</vs-th>
+        <vs-th sort-key="price">Cumpleaños</vs-th>
         <vs-th>Acción</vs-th>
       </template>
 
@@ -109,7 +109,7 @@
               </vs-td>
 
               <vs-td>
-                <p class="product-category">{{ tr.last_name  }}</p>
+                <p class="product-category">{{ tr.number_identification  }}</p>
               </vs-td>
 
               <!-- <vs-td>
@@ -122,7 +122,7 @@
 
 
               <vs-td>
-                <p class="product-price">{{ tr.email }}</p>
+                <p class="product-price">{{ tr.birth_day }}</p>
               </vs-td>
 
               <vs-td class="whitespace-no-wrap">
@@ -149,6 +149,7 @@ export default {
   data () {
     return {
       selected: [],
+      // products: [],
       itemsPerPage: 4,
       isMounted: false,
 
@@ -210,10 +211,9 @@ export default {
       this.$store.registerModule('dataList', moduleDataList)
       moduleDataList.isRegistered = true
     }
-
+    console.log('get Models')
     this.$store.dispatch('dataList/fetchDataListItems').then((data)=>{
-      console.log('ALL CONTACTS....', data.data.data)
-  
+      console.log('response server', data)
     })
   },
   mounted () {

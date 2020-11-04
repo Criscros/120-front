@@ -11,6 +11,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+
 // Vuesax Component Framework
 import Vuesax from 'vuesax'
 import 'material-icons/iconfont/material-icons.css' //Material Icons
@@ -52,8 +53,10 @@ import { VueHammer } from 'vue2-hammer'
 Vue.use(VueHammer)
 
 // VeeValidate
-import VeeValidate from 'vee-validate'
+import VeeValidate , { Validator }  from 'vee-validate'
+import es from 'vee-validate/dist/locale/es.js'
 Vue.use(VeeValidate)
+Validator.localize("es", es);
 
 
 // PrismJS

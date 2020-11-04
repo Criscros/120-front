@@ -298,15 +298,14 @@ export default {
       })
     })
   },
-
-
   // JWT
   loginJWT ({ commit }, payload) {
+    
     return new Promise((resolve, reject) => {
 
-      jwt.loginStudio(payload.userDetails.email, payload.userDetails.password)
+      jwt.login(payload.userDetails.email, payload.userDetails.password)
         .then(response => {
-          console.log(response)
+         
           // If there's user data in response
           if (response.data.success) {
 
@@ -323,11 +322,15 @@ export default {
             commit('SET_BEARER', response.data.token)
 
             // Navigate User to homepage
-            router.push(router.currentRoute.query.to || '/')
+            router.push(router.currentRoute.query.to || '/models')
 
             resolve(response)
           } else {
-            reject({message: 'Wrong Email or Password'})
+            
+
+            resolve(response)
+            
+            //reject({message: 'Wrong Email or Password'})
           }
 
         })
@@ -349,7 +352,7 @@ export default {
         .then(response => {
 
           //VALIDATE DATA
-          console.log(response.data.success)
+  
           if(response.data.success ){
 
             // Update data in localStorage
@@ -368,7 +371,7 @@ export default {
             router.push(router.currentRoute.query.to || '/models')
 
           }else{
-            reject({message: 'algo salio mal ...'})
+            console.log('login faill',response.data) 
           }
 
         })
@@ -390,15 +393,14 @@ export default {
           console.log('1',response)
           // If there's user data in response
           if (response.data) {
-            commit('SET_BEARER', response.data)
-            console.log('0',response.data)
+            commit('SET_BEARER', response.data.token)
+            console.log('REVISANDo....',response.data)
             localStorage.setItem('accessToken', response.data.token)
             localStorage.setItem('user_id', response.data.user_id)
-            console.log('---','/api/resetpassword/auth/'+response.data.user_id + '/' + response.data.token)
-            router.push(router.currentRoute.query.to || '/api/resetpassword/auth/'+response.data.user_id + '/' + response.data.token)
+            // MESAGE 
             resolve(response)
           } else {
-            reject({message: 'Wrong Email or Password'})
+            resolve(response)
           }
 
         })
@@ -409,7 +411,9 @@ export default {
   resetPassword( {commit} ,password){
 
     let token = localStorage.getItem('accessToken')
-    console.log(token)
+    console.log('AQUi TOKEN ', token)
+
+    commit('SET_BEARER', token)
 
     return new Promise((resolve, reject) => {
 
